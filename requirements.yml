@@ -1,0 +1,14 @@
+- src: Stouts.apt
+- src: Stouts.locale
+- src: Stouts.timezone
+- src: Stouts.users
+- src: Stouts.nginx
+- name: Stouts.ruby
+  src: 'https://github.com/khusnetdinov/Stouts.ruby'
+- name: provision.other
+  src: 'https://github.com/khusnetdinov/provision.other.git'
+- src: ANXS.postgresql
+- src: Stouts.redis
+- src: nickhammond/ansible-logrotate
+
+
