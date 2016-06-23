@@ -2,21 +2,21 @@
 - hosts: all
   sudo: yes
   roles:
-    - role: Stouts.apt
+    - role: apt
       apt_upgrade: full
       apt_install_recommends: yes
       apt_install_packages: yes
       apt_packages:
         - imagemagick
 
-    - role: Stouts.locale
+    - role: locale
       locale_locales:
       - ru_RU.UTF-8
 
-    - role: Stouts.timezone
+    - role: timezone
       timezone_timezone: Europe/Moscow
 
-    - role: Stouts.users
+    - role: users
       users_enaibled: yes
       users_groups:
         - name: sudo
@@ -26,35 +26,29 @@
         - name: deploy
           system: true
           groups: sudo,deploy
-        - name: khusnetdinov
-          groups: sudo,deploy
       users_ssh_keys:
         - name: deploy
           authorized:
           - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-        - name: khusnetdinov
-          authorized:
-          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-
       users_shell: /bin/zsh
 
-    - role: provision.other
+    - role: other
       provision_user: deploy
 
 - hosts: web
   sudo: yes
   roles:
-    - role: Stouts.nginx
+    - role: nginx
       tags: [nginx]
 
-    - role: Stouts.ruby
+    - role: ruby
       ruby_version: 2.2.2
       ruby_gems: [bundler]
 
 - hosts: db
   sudo: yes
   roles:
-    - role: ANXS.postgresql
+    - role: postgresql
       postgresql_version: 9.5
       postgresql_encoding: 'UTF-8'
       postgresql_locale: 'en_US.UTF-8'
@@ -74,13 +68,14 @@
           db: techview_production
           priv: "ALL"
 
-    - role: Stouts.redis
+    - role: redis
+      redis_user: deploy
       redis_bind: 127.0.0.1
 
 - hosts: service
   sudo: yes
   roles:
-    - role: nickhammond.logrotate
+    - role: logrotate
       logrotate_scripts:
         - name: application
           path: '/var/log/applications/techview/*.log'
@@ -90,4 +85,3 @@
             - compress
             - delaycompress
             - copytruncate
-    # - role: monit
