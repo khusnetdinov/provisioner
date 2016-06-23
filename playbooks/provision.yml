@@ -26,10 +26,16 @@
         - name: deploy
           system: true
           groups: sudo,deploy
+        - name: khusnetdinov
+          groups: sudo,deploy
       users_ssh_keys:
         - name: deploy
           authorized:
           - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        - name: khusnetdinov
+          authorized:
+          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
       users_shell: /bin/zsh
 
     - role: provision.other
@@ -42,45 +48,41 @@
       tags: [nginx]
 
     - role: Stouts.ruby
-      ruby_versions:
-        2.2.0:
-          version: 2.2.0
-          download_location: https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.0.tar.gz
-      ruby_version: 2.2.0
+      ruby_version: 2.2.2
       ruby_gems: [bundler]
 
 - hosts: db
   sudo: yes
   roles:
-  - role: ANXS.postgresql
-    postgresql_version: 9.5
-    postgresql_encoding: 'UTF-8'
-    postgresql_locale: 'en_US.UTF-8'
-    postgresql_admin_user: "postgres"
-    postgresql_default_auth_method: "trust"
-    postgresql_cluster_name: "main"
-    postgresql_cluster_reset: false
-    postgresql_users:
-      - name: techview
-        pass: techview
-    postgresql_databases:
-      - name: techview_production
-        owner: techview
-        uuid_ossp: yes
-    postgresql_user_privileges:
-      - name: techview
-        db: techview_production
-        priv: "ALL"
+    - role: ANXS.postgresql
+      postgresql_version: 9.5
+      postgresql_encoding: 'UTF-8'
+      postgresql_locale: 'en_US.UTF-8'
+      postgresql_admin_user: "postgres"
+      postgresql_default_auth_method: "trust"
+      postgresql_cluster_name: "main"
+      postgresql_cluster_reset: false
+      postgresql_users:
+        - name: techview
+          pass: techview
+      postgresql_databases:
+        - name: techview_production
+          owner: techview
+          uuid_ossp: yes
+      postgresql_user_privileges:
+        - name: techview
+          db: techview_production
+          priv: "ALL"
 
-  - role: Stouts.redis
-    redis_bind: 127.0.0.1
+    - role: Stouts.redis
+      redis_bind: 127.0.0.1
 
 - hosts: service
   sudo: yes
   roles:
-    - role: nickhammond/ansible-logrotate
+    - role: nickhammond.logrotate
       logrotate_scripts:
-        - name: railsapp
+        - name: application
           path: '/var/log/applications/techview/*.log'
           options:
             - weekly
@@ -88,23 +90,4 @@
             - compress
             - delaycompress
             - copytruncate
-        - name: nginx
-          path: /var/log/nginx/*.log
-          options:
-            - weekly
-            - size 10M
-            - missingok
-            - compress
-            - delaycompress
-            - copytruncate
-        # /var/log/redis_6379.log
-        # /var/log/pgsql_log
-
-    # monit
-  #- tasks:
-     # ensure nginx
-     # ensure postgres
-     # ensure redis
-     # logging directories
-     # reboot server ?
-
+    # - role: monit

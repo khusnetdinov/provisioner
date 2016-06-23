@@ -3,12 +3,12 @@
 - src: Stouts.timezone
 - src: Stouts.users
 - src: Stouts.nginx
+- src: Stouts.redis
 - name: Stouts.ruby
-  src: 'https://github.com/khusnetdinov/Stouts.ruby'
+  src: 'https://github.com/khusnetdinov/Stouts.ruby.git'
 - name: provision.other
   src: 'https://github.com/khusnetdinov/provision.other.git'
 - src: ANXS.postgresql
-- src: Stouts.redis
-- src: nickhammond/ansible-logrotate
+- src: nickhammond.logrotate
 
 
