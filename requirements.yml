@@ -32,6 +32,10 @@
   name: logrotate
   version: v0.0.3
 
+- src: "https://github.com/Stouts/Stouts.deploy"
+  name: directories
+  version: 1.2.0
+
 - src: "https://github.com/khusnetdinov/provision.other"
   name: other
 

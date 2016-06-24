@@ -75,13 +75,28 @@
 - hosts: service
   sudo: yes
   roles:
+    - role: directories
+      deploy_enabled: yes
+      deploy_env: production
+      deploy_user: deploy
+      deploy_group: deploy
+      deploy_app_name: techview
+      deploy_dir: /home/deploy/applications/techview
+      deploy_dir_skip: [
+        "{{deploy_etc_dir}}",
+        "{{deploy_log_dir}}",
+        "{{deploy_run_dir}}",
+        "{{deploy_src_dir}}",
+        "{{deploy_bin_dir}}"
+      ]
+
     - role: logrotate
       logrotate_scripts:
         - name: application
-          path: '/var/log/applications/techview/*.log'
+          path: '/home/deploy/applications/techview/logs/*.log'
           options:
             - weekly
-            - size 10M
+            - size 1M
             - compress
             - delaycompress
             - copytruncate
