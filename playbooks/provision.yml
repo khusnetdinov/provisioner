@@ -81,7 +81,7 @@
       deploy_user: deploy
       deploy_group: deploy
       deploy_app_name: techview
-      deploy_dir: /home/deploy/applications/techview
+      deploy_dir: /var/www/techview
       deploy_dir_skip: [
         "{{deploy_etc_dir}}",
         "{{deploy_log_dir}}",
@@ -93,7 +93,7 @@
     - role: logrotate
       logrotate_scripts:
         - name: application
-          path: '/home/deploy/applications/techview/logs/*.log'
+          path: "/var/www/techview/current/logs/*.log"
           options:
             - weekly
             - size 1M
