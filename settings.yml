@@ -45,9 +45,4 @@ deploy_postgres_database: "{{ deploy_project }}_production"
 
 # Ruby
 deploy_ruby_version: 2.2.2
-deploy_folders:
-  - shared
-  - shared/config
-  - current
-  - current/log
 

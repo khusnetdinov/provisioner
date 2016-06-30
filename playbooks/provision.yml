@@ -68,5 +68,9 @@
     - role: folders
       deploy_user_group: "{{ deploy_user }}"
       project: "{{ deploy_project }}"
-      folders: "{{ deploy_folders }}"
+      folders:
+        - shared
+        - shared/config
+        - releases
+
 
