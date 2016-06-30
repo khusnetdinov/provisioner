@@ -1,7 +1,3 @@
-- src: "https://github.com/Stouts/Stouts.apt"
-  name: apt
-  version: 1.4.0
-
 - src: "https://github.com/Stouts/Stouts.locale"
   name: locale
   version: 1.1.0
@@ -10,32 +6,34 @@
   name: timezone
   version: 2.2.0
 
-- src: "https://github.com/Stouts/Stouts.users"
-  name: users
+- src: "https://github.com/kamaln7/ansible-swapfile"
+  name: swapfile
+
+- src: "https://github.com/areceipt/provision.user"
+  name: user
+
+- src: "https://github.com/Stouts/Stouts.apt"
+  name: apt
+  version: 1.4.0
+
+- src: "https://github.com/khusnetdinov/postgresql"
+  name: postgresql
+
+- src: "https://github.com/geerlingguy/ansible-role-redis"
+  name: redis
   version: 1.2.0
 
 - src: "https://github.com/Stouts/Stouts.nginx"
   name: nginx
   version: 2.1.1
 
-- src: "https://github.com/geerlingguy/ansible-role-redis"
-  name: redis
-  version: 1.2.0
-
-- src: "https://github.com/khusnetdinov/Stouts.ruby"
-  name: ruby
-
-- src: "https://github.com/khusnetdinov/postgresql"
-  name: postgresql
-
 - src: "https://github.com/nickhammond/ansible-logrotate"
   name: logrotate
   version: v0.0.3
 
-- src: "https://github.com/Stouts/Stouts.deploy"
-  name: directories
-  version: 1.2.0
+- src: "https://github.com/areceipt/provision.ruby"
+  name: ruby
 
-- src: "https://github.com/khusnetdinov/provision.other"
-  name: other
+- src: "https://github.com/areceipt/provision.folders"
+  name: folders
 

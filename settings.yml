@@ -1,0 +1,53 @@
+# Prepare system
+deploy_locales:
+  - ru_RU.UTF-8
+deploy_timezone: Europe/Moscow
+deploy_swapfile_size: 2GB
+deploy_user: deploy
+deploy_user_home: "/home/{{ deploy_user }}"
+deploy_user_group: "{{ deploy_user }}"
+
+# Provision
+deploy_packages:
+  - autoconf
+  - automake
+  - bison
+  - build-essential
+  - gcc
+  - curl
+  - exuberant-ctags
+  - git
+  - git-core
+  - libc6-dev
+  - libncurses5-dev
+  - libffi-dev
+  - libreadline6
+  - libreadline6-dev
+  - libreadline-dev
+  - libssl-dev
+  - libtool
+  - libyaml-dev
+  - libxml2-dev
+  - libxslt1-dev
+  - openssl
+  - zlib1g
+  - zlib1g-dev
+  - libpq-dev
+  - nodejs
+  - nodejs-legacy
+  - npm
+  - p7zip-full
+  - imagemagick
+deploy_project: techview
+deploy_postgres_version: 9.5
+deploy_postgres_user: "{{ deploy_project }}"
+deploy_postgres_database: "{{ deploy_project }}_production"
+
+# Ruby
+deploy_ruby_version: 2.2.2
+deploy_folders:
+  - shared
+  - shared/config
+  - current
+  - current/log
+

@@ -1,102 +1,72 @@
 ---
 - hosts: all
-  sudo: yes
+  vars_files:
+    - ../settings.yml
+  remote_user: root
+  roles:
+    - role: locale
+      locale_locales: "{{ deploy_locales }}"
+
+    - role: timezone
+      timezone_timezone: "{{ deploy_timezone }}"
+
+    - role: swapfile
+      swapfile_size: "{{ deploy_swapfile_size }}"
+      swapfile_swappiness: 10
+
+    - role: user
+      user: "{{ deploy_user }}"
+      home: "{{ deploy_user_home }}"
+
+- hosts: all
+  vars_files:
+    - ../settings.yml
+  become_user: deploy
   roles:
     - role: apt
       apt_upgrade: full
       apt_install_recommends: yes
       apt_install_packages: yes
-      apt_packages:
-        - imagemagick
+      apt_packages: "{{ deploy_packages }}"
 
-    - role: locale
-      locale_locales:
-      - ru_RU.UTF-8
-
-    - role: timezone
-      timezone_timezone: Europe/Moscow
-
-    - role: users
-      users_enaibled: yes
-      users_groups:
-        - name: sudo
-          system: true
-        - name: deploy
-      users_users:
-        - name: deploy
-          system: true
-          groups: sudo,deploy
-      users_ssh_keys:
-        - name: deploy
-          authorized:
-          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      users_shell: /bin/zsh
-
-    - role: other
-      provision_user: deploy
-
-- hosts: web
-  sudo: yes
-  roles:
-    - role: nginx
-      tags: [nginx]
-
-    - role: ruby
-      ruby_version: 2.2.2
-      ruby_gems: [bundler]
-
-- hosts: db
-  sudo: yes
-  roles:
     - role: postgresql
-      postgresql_version: 9.5
-      postgresql_encoding: 'UTF-8'
-      postgresql_locale: 'en_US.UTF-8'
-      postgresql_admin_user: "postgres"
-      postgresql_default_auth_method: "trust"
-      postgresql_cluster_name: "main"
-      postgresql_cluster_reset: false
+      postgresql_version: "{{ deploy_postgres_version }}"
       postgresql_users:
-        - name: techview
-          pass: techview
+        - name: "{{ deploy_postgres_user }}"
+          pass: "{{ deploy_postgres_user }}"
       postgresql_databases:
-        - name: techview_production
-          owner: techview
+        - name: "{{ deploy_postgres_database }}"
+          owner: "{{ deploy_postgres_user }}"
           uuid_ossp: yes
       postgresql_user_privileges:
-        - name: techview
-          db: techview_production
+        - name: "{{ deploy_postgres_user }}"
+          db: "{{ deploy_postgres_database }}"
           priv: "ALL"
 
     - role: redis
-      redis_user: deploy
+      redis_user: redis
       redis_bind: 127.0.0.1
 
-- hosts: service
-  sudo: yes
-  roles:
-    - role: directories
-      deploy_enabled: yes
-      deploy_env: production
-      deploy_user: deploy
-      deploy_group: deploy
-      deploy_app_name: techview
-      deploy_dir: /var/www/techview
-      deploy_dir_skip: [
-        "{{deploy_etc_dir}}",
-        "{{deploy_log_dir}}",
-        "{{deploy_run_dir}}",
-        "{{deploy_src_dir}}",
-        "{{deploy_bin_dir}}"
-      ]
+    - role: nginx
+      tags: [nginx]
 
     - role: logrotate
       logrotate_scripts:
-        - name: application
-          path: "/var/www/techview/current/logs/*.log"
+        - name: "{{ deploy_project }}"
+          path: "/var/www/{{ deploy_project }}/current/logs/*.log"
           options:
             - weekly
             - size 1M
             - compress
             - delaycompress
             - copytruncate
+
+    - role: ruby
+      rbenv_user: "{{ deploy_user }}"
+      ruby_version: "{{ deploy_ruby_version }}"
+
+    - role: folders
+      deploy_user_group: "{{ deploy_user }}"
+      project: "{{ deploy_project }}"
+      folders: "{{ deploy_folders }}"
+
