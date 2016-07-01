@@ -38,6 +38,7 @@
         - name: "{{ deploy_postgres_database }}"
           owner: "{{ deploy_postgres_user }}"
           uuid_ossp: yes
+          pgcrypto: yes
       postgresql_user_privileges:
         - name: "{{ deploy_postgres_user }}"
           db: "{{ deploy_postgres_database }}"
@@ -65,12 +66,17 @@
       rbenv_user: "{{ deploy_user }}"
       ruby_version: "{{ deploy_ruby_version }}"
 
-    - role: folders
-      deploy_user_group: "{{ deploy_user }}"
-      project: "{{ deploy_project }}"
-      folders:
-        - shared
-        - shared/config
-        - releases
+  tasks:
+    # Folders
+    - name: Creates project directory
+      file: path=/var/www/{{ deploy_project }} state=directory state=directory group={{ deploy_user_group }}
 
+    - name: Creates project shared directory
+      file: path=/var/www/{{ deploy_project }}/shared state=directory state=directory group={{ deploy_user_group }}
+
+    - name: Creates project shared/config directory
+      file: path=/var/www/{{ deploy_project }}/shared/config state=directory state=directory group={{ deploy_user_group }}
+
+    - name: 'Chown project folder'
+      shell: "sudo chown -R {{ deploy_user }} /var/www/{{ deploy_project }}"
 

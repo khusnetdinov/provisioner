@@ -34,6 +34,3 @@
 - src: "https://github.com/areceipt/provision.ruby"
   name: ruby
 
-- src: "https://github.com/areceipt/provision.folders"
-  name: folders
-
