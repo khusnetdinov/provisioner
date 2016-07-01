@@ -40,9 +40,8 @@ deploy_packages:
   - imagemagick
 deploy_project: techview
 deploy_postgres_version: 9.5
-deploy_postgres_user: "{{ deploy_user }}"
-deploy_postgres_user_password: "{{ deploy_user }}_MIIEpAIBAAKCAQEA0pW/W/jh6fm7"
-deploy_postgres_database: "{{ deploy_user }}_production"
+deploy_postgres_user: "{{ deploy_project }}"
+deploy_postgres_database: "{{ deploy_project }}_production"
 
 # Ruby
 deploy_ruby_version: 2.2.2
