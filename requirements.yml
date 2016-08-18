@@ -16,7 +16,7 @@
   name: apt
   version: 1.4.0
 
-- src: "https://github.com/khusnetdinov/postgresql"
+- src: "https://github.com/ANXS/postgresql"
   name: postgresql
 
 - src: "https://github.com/geerlingguy/ansible-role-redis"
