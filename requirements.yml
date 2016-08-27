@@ -9,7 +9,7 @@
 - src: "https://github.com/kamaln7/ansible-swapfile"
   name: swapfile
 
-- src: "https://github.com/areceipt/provision.user"
+- src: "https://github.com/khusnetdinov/provision.user"
   name: user
 
 - src: "https://github.com/Stouts/Stouts.apt"
@@ -31,6 +31,6 @@
   name: logrotate
   version: v0.0.3
 
-- src: "https://github.com/areceipt/provision.ruby"
+- src: "https://github.com/khusnetdinov/provision.ruby"
   name: ruby
 
