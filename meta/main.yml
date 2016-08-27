@@ -9,7 +9,7 @@ galaxy_info:
     - redis
     - nginx
     - logrotate
-    - digital ocean
+    - digital_ocean
     - production
   platforms:
     - name: Ubuntu
@@ -23,7 +23,7 @@ galaxy_info:
     - redis
     - nginx
     - logrotate
-    - digital ocean
+    - digital_ocean
     - production
   license: MIT
   min_ansible_version: 1.8
