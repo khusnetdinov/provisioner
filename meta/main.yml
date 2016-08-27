@@ -1,6 +1,6 @@
 galaxy_info:
   author: Marat Khustnetdinov
-  description: Ansible role witch provision production enviroment for linux (Ubunty) server. Creates deploy user, sets timezone, locales, create swap file. Prepare tools for Ruby on Rails production: PostgreSQL, Redis, Nginx, Logrotate, Prepare folders for capistrano.
+  description: Ansible role witch provision production enviroment for linux (Ubunty) server. Creates deploy user, sets timezone, locales, create swap file. Prepare PostgreSQL, Redis, Nginx, Logrotate, folders for capistrano and other tools.
   galaxy_tags:
     - system
     - ruby
