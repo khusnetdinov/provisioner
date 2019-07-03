@@ -1,64 +1,81 @@
 # Provisioner
 [![Galaxy](https://img.shields.io/badge/galaxy-provisioner-blue.svg?style=flat-square)](https://galaxy.ansible.com/khusnetdinov/provisioner/)
 
-This is ansible receipt for prepare enviroment on linux (Ubuntu) for run Ruby on Rails application in production. Setting up deploy user, timezone, locales, swapfile. Install PostgreSQL, Redis, Nginx. Create folders for capistrano.
+This ansible role helps to use several receipts together. Just wrapper for other roles.
+
+## Files structure
+
+```
+  ├── /defaults/                  # Default variables for playbook
+  │   └── main.yml                # Variables for playbook
+  ├── /meta/                      # Meta
+  │   └── main.yml                # Ansible Galaxy meta information
+  ├── /roles/                     # Vendor playbooks
+  ├── /temp/                      # Temp files
+  │── ansible.cfg                 # Ansible configuration file
+  │── hosts                       # Inventory file
+  │── README.md                   # Project description
+  │── requerements.txt            # Dependencies file
+  └── playbook.yml                # Playbook file
+```
+
+## How it works
 
 #### Dependencies
 
 Provisioner use other ansible receipts witch are specified in `requirements.yml`:
 
 ```yaml
-- src: "https://github.com/Stouts/Stouts.locale"
-  name: locale
-  version: 1.1.0
+  ---
 
-... other tools ...
+  - src: "https://github.com/Stouts/Stouts.locale"
+    name: locale
+    version: 1.1.0
 
-- src: "https://github.com/khusnetdinov/provision.ruby"
-  name: ruby
+  ... other tools ...
 
 ```
 
-#### Variables
+#### Installation
 
-All variables should be placed in `settings.yml`:
+Run command:
+
+```bash
+  $ ansible-galaxy install -r requirements.yml
+```
+
+#### Configuration
+
+All variables should be placed in `defaults/main.yml`:
 
 ```yaml
-# Prepare system
-deploy_locales:
-  - ru_RU.UTF-8
-deploy_timezone: Europe/Moscow
-deploy_swapfile_size: 2GB
-deploy_user: deploy
-deploy_user_home: "/home/{{ deploy_user }}"
-deploy_user_group: "{{ deploy_user }}"
-
-# Provision
-deploy_packages:                                              # Apt packages
-  - library
-  - other_library
-
-deploy_project: project                                       # Application name 
-deploy_postgres_version: 9.5
-deploy_postgres_user: "{{ deploy_user }}"
-deploy_postgres_database: "{{ deploy_user }}_production"
-
-# Ruby
-deploy_ruby_version: 2.2.2
+  ---
+  
+  provision_user_name: deploy
+  
+  ... other variables ...
 ```
 
-This variables are used in playbook `playbooks/provision.yml`.
+This variables are used in playbook `playbook.yml`.
 
-#### Usage
+#### Playbook
 
-Provisioner prepares first system and deploy user and further install all tools under deploy user.
+Playbook is `playbook.yml` - main file. Plase here all logic.
 
-Makefile handles all actions. Theere are two stages `staging`, `production`. Staging enviroment is default.
+#### Inventory
 
-- Specify `hosts` in `inventories/[enviroment].ini`
-- Specify system variables: timezone, locales, deploy user, versions on DBs, server and rubies and other.
-- Install all required roles `make install [enviroment]`
-- Run provision for enviroment `make provision [enviroment]`
-- Set up capistrano receipts.
-- Run capistrano deploy
-- Be happy
+Is located in `hosts`.
+
+```ini
+  # hosts
+
+  [provision]
+  # Set you hosts
+  0.0.0.0
+```
+
+#### Run provision
+
+```bash
+  $ ansible-playbook playbook.yml -i hosts -vvv
+```
